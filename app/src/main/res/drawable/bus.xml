@@ -8,7 +8,7 @@
     <group android:name="wrapper">
         <clip-path
             android:name="804a2a64b2"
-            android:pathData="M 66.961 0 L 316.711 0 L 316.711 384 L 66.961 384 Z M 66.961 0"/>
+            android:pathData="M 66.961 0 L 316.711 0 L 316.711 381 L 66.961 384 Z M 66.961 0"/>
         <group android:name="group">
             <path
                 android:name="path"
@@ -17,9 +17,4 @@
                 android:strokeWidth="1"/>
         </group>
     </group>
-    <path
-        android:name="path_1"
-        android:pathData="M 212.129 166.662 L 207.473 148.943 L 176.754 148.943 L 171.973 166.662 L 143.895 166.662 L 174.754 71.709 L 208.832 71.709 L 240.082 166.662 Z M 202.176 127.974 L 198.098 112.459 C 197.149 109.013 195.993 104.548 194.629 99.068 C 193.274 93.591 192.383 89.67 191.957 87.302 C 191.571 89.502 190.805 93.123 189.661 98.162 C 188.512 103.205 185.977 113.142 182.051 127.974 Z M 202.176 127.974"
-        android:fillColor="#ffbd59"
-        android:strokeWidth="1"/>
 </vector>

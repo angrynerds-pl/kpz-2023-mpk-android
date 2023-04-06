@@ -17,9 +17,4 @@
                 android:strokeWidth="1"/>
         </group>
     </group>
-    <path
-        android:name="path_4"
-        android:pathData="M 206.242 183.892 L 177.789 183.892 L 177.789 101.845 L 152.07 101.845 L 152.07 78.58 L 231.883 78.58 L 231.883 101.845 L 206.242 101.845 Z M 206.242 183.892"
-        android:fillColor="#5271ff"
-        android:strokeWidth="1"/>
 </vector>
