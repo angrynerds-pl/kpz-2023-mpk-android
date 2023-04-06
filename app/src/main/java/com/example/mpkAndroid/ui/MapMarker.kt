@@ -31,7 +31,7 @@ fun MapMarker(
 
 enum class MapMarkerType(@DrawableRes val iconId: Int) {
     BUS(R.drawable.bus),
-    TRAM(R.drawable.tram_mock)
+    TRAM(R.drawable.tram)
 }
 
 fun bitmapDescriptorFromVector(
