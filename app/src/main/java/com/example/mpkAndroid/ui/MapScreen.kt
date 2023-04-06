@@ -3,9 +3,7 @@ package com.example.mpkAndroid.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mpkAndroid.R
 import com.example.mpkAndroid.ui.theme.MpkAndroidTheme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -25,10 +23,9 @@ fun MapScreen() {
         cameraPositionState = cameraPositionState
     ) {
         MapMarker(
-            context = LocalContext.current,
             position = wroclaw,
-            title = "Wrocław",
-            iconId = R.drawable.bus1
+            title = "16",
+            type = MapMarkerType.BUS
         )
     }
 }

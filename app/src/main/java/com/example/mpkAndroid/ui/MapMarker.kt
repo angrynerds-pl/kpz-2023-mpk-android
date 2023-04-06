@@ -5,7 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import com.example.mpkAndroid.R
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -14,12 +16,12 @@ import com.google.maps.android.compose.MarkerState
 
 @Composable
 fun MapMarker(
-    context: Context,
     position: LatLng,
     title: String,
-    @DrawableRes iconId: Int
+    type: MapMarkerType = MapMarkerType.BUS,
+    iconSize: Int = 100
 ) {
-    val icon = bitmapDescriptorFromVector(context, iconId)
+    val icon = bitmapDescriptorFromVector(LocalContext.current, type.iconId, iconSize)
     Marker(
         state = MarkerState(position),
         title = title,
@@ -27,15 +29,22 @@ fun MapMarker(
     )
 }
 
+enum class MapMarkerType(@DrawableRes val iconId: Int) {
+    BUS(R.drawable.bus),
+    TRAM(R.drawable.tram_mock)
+}
+
 fun bitmapDescriptorFromVector(
     context: Context,
-    @DrawableRes vectorDrawableResourceId: Int
+    @DrawableRes vectorDrawableResourceId: Int,
+    bitmapSize: Int
 ): BitmapDescriptor {
     val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
-    vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+    vectorDrawable!!.setBounds(0, 0, bitmapSize, bitmapSize)
+
     val bitmap = Bitmap.createBitmap(
-        vectorDrawable.intrinsicWidth,
-        vectorDrawable.intrinsicHeight,
+        bitmapSize,
+        bitmapSize,
         Bitmap.Config.ARGB_8888
     )
     val canvas = Canvas(bitmap)
