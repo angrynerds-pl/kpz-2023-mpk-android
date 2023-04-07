@@ -22,7 +22,11 @@ fun MapScreen() {
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
-
+        MapMarker(
+            position = wroclaw,
+            title = "16",
+            type = MapMarkerType.BUS
+        )
     }
 }
 
