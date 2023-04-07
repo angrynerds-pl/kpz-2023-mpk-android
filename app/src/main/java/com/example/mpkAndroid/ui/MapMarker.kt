@@ -55,7 +55,7 @@ fun bitmapDescriptorFromVector(
     )
     val paint = Paint().apply {
         color = vehicleType.color
-        textSize = 25f
+        textSize = 28f
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true
     }
@@ -64,7 +64,7 @@ fun bitmapDescriptorFromVector(
     canvas.drawText(
         text,
         bitmapSize / 2f,
-        bitmapSize / 2.44f,
+        bitmapSize / 2.25f,
         paint
     )
 
