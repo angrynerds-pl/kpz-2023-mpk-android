@@ -2,9 +2,11 @@ package com.example.mpkAndroid.ui.mapScreen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mpkAndroid.domain.model.VehicleType
 import com.example.mpkAndroid.ui.MapMarker
 import com.example.mpkAndroid.ui.MapMarkerType
 import com.example.mpkAndroid.ui.theme.MpkAndroidTheme
@@ -19,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 fun MapScreen(
     mapScreenViewModel : MapScreenViewModel = hiltViewModel<MapScreenViewModel>()
 ) {
-    val wroclaw = LatLng(51.11, 17.04)
     val cameraPositionState = rememberCameraPositionState {
         position = mapScreenViewModel.uiState.value.startingCameraPosition!!
     }
@@ -27,11 +28,13 @@ fun MapScreen(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
-        MapMarker(
-            position = wroclaw,
-            title = "16",
-            type = MapMarkerType.BUS
-        )
+        for (vehicle in mapScreenViewModel.uiState.collectAsState().value.vehiclesPositions)
+        {
+            if(vehicle.type == VehicleType.BUS)
+                MapMarker(position = LatLng(vehicle.latitude, vehicle.longitude), title = vehicle.number, type = MapMarkerType.BUS)
+            else
+                MapMarker(position = LatLng(vehicle.latitude, vehicle.longitude), title = vehicle.number, type = MapMarkerType.TRAM)
+        }
     }
 }
 
