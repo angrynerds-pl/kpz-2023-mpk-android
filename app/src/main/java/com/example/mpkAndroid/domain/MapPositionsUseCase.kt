@@ -14,7 +14,7 @@ class MapPositionsUseCase @Inject constructor(
     private val vehicleRepository: VehicleRepository
 ){
 
-    fun getVehiclesPositions(chosenLines: Set<String>) : List<Vehicle>{
+    fun getVehiclesPositions(chosenLines: Collection<String>) : Collection<Vehicle>{
         return vehicleRepository.getPositions(chosenLines)
     }
 

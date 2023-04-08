@@ -32,7 +32,7 @@ class MapScreenViewModel @Inject constructor(
     fun updateVehiclesPosition(chosenLines: Set<String> = setOf("145", "8")){
         _uiState.update { currentState ->
             currentState.copy(
-                vehiclesPositions = mapPositionsUseCase.getVehiclesPositions(chosenLines)
+                vehiclesPositions = mapPositionsUseCase.getVehiclesPositions(chosenLines) as List<Vehicle>
             )
         }
     }

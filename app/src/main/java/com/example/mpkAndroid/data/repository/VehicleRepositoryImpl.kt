@@ -7,7 +7,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 object VehiclesData {
-    val vehicles: List<Vehicle> = listOf<Vehicle>(
+    val vehicles: Collection<Vehicle> = listOf(
         Vehicle("145", VehicleType.BUS,  51.10113, 17.04063),
         Vehicle("145", VehicleType.BUS,  51.04912, 17.059267),
         Vehicle("136", VehicleType.BUS,  51.120274, 16.973097),
@@ -25,7 +25,7 @@ object VehiclesData {
 
 @ViewModelScoped
 class VehicleRepositoryImpl @Inject constructor() : VehicleRepository {
-    override fun getPositions(chosenLines: Set<String>): List<Vehicle> {
+    override fun getPositions(chosenLines: Collection<String>): Collection<Vehicle> {
         return VehiclesData.vehicles.filter { it.number in chosenLines }
     }
 }

@@ -3,5 +3,9 @@ package com.example.mpkAndroid.domain
 import com.example.mpkAndroid.domain.model.Vehicle
 
 interface VehicleRepository {
-    fun getPositions(chosenLines : Set<String>) : List<Vehicle>
+
+    /**
+     * @param chosenLines should be collection with unique values
+     */
+    fun getPositions(chosenLines : Collection<String>) : Collection<Vehicle>
 }
