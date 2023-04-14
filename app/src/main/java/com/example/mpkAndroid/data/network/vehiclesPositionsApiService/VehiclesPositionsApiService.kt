@@ -14,5 +14,5 @@ interface VehiclesPositionsApiService {
     suspend fun getVehiclesPositions(
         @Field("busList[tram][]") trams: Collection<String>,
         @Field("busList[bus][]") bus: Collection<String>
-    ): List<VehicleEntity>
+    ): Collection<VehicleEntity>
 }
