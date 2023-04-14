@@ -5,7 +5,11 @@ import com.example.mpkAndroid.domain.model.Vehicle
 interface VehicleRepository {
 
     /**
-     * @param chosenLines should be collection with unique values
+     * @param chosenTramLines should be collection with unique values
+     * @param chosenBusLines should be collection with unique values
      */
-    fun getPositions(chosenLines : Collection<String>) : Collection<Vehicle>
+    suspend fun getPositions(
+        chosenTramLines: Collection<String>,
+        chosenBusLines: Collection<String>
+    ): Collection<Vehicle>
 }

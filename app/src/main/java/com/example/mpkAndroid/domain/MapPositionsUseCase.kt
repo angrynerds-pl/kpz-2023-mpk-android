@@ -12,13 +12,16 @@ private const val ZOOM_LVL = 13f
 
 class MapPositionsUseCase @Inject constructor(
     private val vehicleRepository: VehicleRepository
-){
+) {
 
-    fun getVehiclesPositions(chosenLines: Collection<String>) : Collection<Vehicle>{
-        return vehicleRepository.getPositions(chosenLines)
+    suspend fun getVehiclesPositions(
+        chosenTramLines: Collection<String>,
+        chosenBusLines: Collection<String>
+    ): Collection<Vehicle> {
+        return vehicleRepository.getPositions(chosenTramLines, chosenBusLines)
     }
 
-    fun getCameraStartingPosition() : CameraPosition {
+    fun getCameraStartingPosition(): CameraPosition {
         val wroclaw = LatLng(STARTING_LATITUDE, STARTING_LONGITUDE)
         return CameraPosition.fromLatLngZoom(wroclaw, ZOOM_LVL)
     }
