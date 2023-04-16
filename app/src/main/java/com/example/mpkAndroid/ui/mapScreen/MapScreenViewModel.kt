@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 data class MapScreenState(
@@ -20,20 +22,26 @@ data class MapScreenState(
 
 @HiltViewModel
 class MapScreenViewModel @Inject constructor(
-    private val mapPositionsUseCase: MapPositionsUseCase
+    private val mapPositionsUseCase: MapPositionsUseCase,
+    private val backgroundExecutor: ScheduledExecutorService
 ) : ViewModel() {
+
+    var chosenTramLines: Set<String> = setOf("8")
+
+    var chosenBusLines: Set<String> = setOf("145")
+
     private val _uiState = MutableStateFlow(MapScreenState())
     val uiState: StateFlow<MapScreenState> = _uiState.asStateFlow()
 
     init {
         getStartingPositionOfCamera()
-        updateVehiclesPosition()
+        backgroundExecutor.scheduleAtFixedRate({
+            updateVehiclesPosition()
+        }, 0, 15, TimeUnit.SECONDS)
     }
 
     //remove default chosen lines when implementing lines choosing
     fun updateVehiclesPosition(
-        chosenTramLines: Set<String> = setOf("8"),
-        chosenBusLines: Set<String> = setOf("145")
     ) {
         viewModelScope.launch {
             _uiState.update { currentState ->
@@ -49,5 +57,9 @@ class MapScreenViewModel @Inject constructor(
 
     private fun getStartingPositionOfCamera() {
         _uiState.value = MapScreenState(mapPositionsUseCase.getCameraStartingPosition())
+    }
+
+    override fun onCleared() {
+        backgroundExecutor.shutdownNow()
     }
 }
