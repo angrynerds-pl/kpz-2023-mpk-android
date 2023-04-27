@@ -17,7 +17,10 @@ import javax.inject.Inject
 
 data class MapScreenState(
     val startingCameraPosition: CameraPosition? = null,
-    val vehiclesPositions: List<Vehicle> = emptyList()
+    val vehiclesPositions: List<Vehicle> = emptyList(),
+    var chosenTramLines: Set<String> = setOf("8"),
+    var chosenBusLines: Set<String> = setOf("145")
+
 )
 
 @HiltViewModel
@@ -25,10 +28,6 @@ class MapScreenViewModel @Inject constructor(
     private val mapPositionsUseCase: MapPositionsUseCase,
     private val backgroundExecutor: ScheduledExecutorService
 ) : ViewModel() {
-
-    var chosenTramLines: Set<String> = setOf("8")
-
-    var chosenBusLines: Set<String> = setOf("145")
 
     private val _uiState = MutableStateFlow(MapScreenState())
     val uiState: StateFlow<MapScreenState> = _uiState.asStateFlow()
@@ -47,8 +46,8 @@ class MapScreenViewModel @Inject constructor(
             _uiState.update { currentState ->
                 currentState.copy(
                     vehiclesPositions = mapPositionsUseCase.getVehiclesPositions(
-                        chosenTramLines,
-                        chosenBusLines
+                        currentState.chosenTramLines,
+                        currentState.chosenBusLines
                     ) as List<Vehicle>
                 )
             }
