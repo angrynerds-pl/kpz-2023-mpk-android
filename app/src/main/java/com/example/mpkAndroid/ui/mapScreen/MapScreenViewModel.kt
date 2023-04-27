@@ -18,8 +18,8 @@ import javax.inject.Inject
 data class MapScreenState(
     var startingCameraPosition: CameraPosition? = null,
     val vehiclesPositions: List<Vehicle> = emptyList(),
-    var chosenTramLines: MutableSet<String> = mutableSetOf("8"),
-    var chosenBusLines: MutableSet<String> = mutableSetOf("145")
+    val chosenTramLines: Set<String> = setOf("8"),
+    val chosenBusLines: Set<String> = setOf("145")
 
 )
 
@@ -36,10 +36,9 @@ class MapScreenViewModel @Inject constructor(
         getStartingPositionOfCamera()
         backgroundExecutor.scheduleAtFixedRate({
             updateVehiclesPosition()
-        }, 0, 30, TimeUnit.SECONDS)
+        }, 0, 15, TimeUnit.SECONDS)
     }
 
-    //remove default chosen lines when implementing lines choosing
     fun updateVehiclesPosition(
     ) {
         viewModelScope.launch {
@@ -61,10 +60,10 @@ class MapScreenViewModel @Inject constructor(
     fun removeBusLine(line: String) {
 
         _uiState.update { currentState ->
-            val newChosenBusLines = currentState.chosenBusLines
+            val newChosenBusLines = currentState.chosenBusLines.toMutableSet()
             newChosenBusLines.remove(line)
             currentState.copy(
-                chosenBusLines = newChosenBusLines
+                chosenBusLines = newChosenBusLines.toSet()
             )
 
         }
@@ -72,10 +71,10 @@ class MapScreenViewModel @Inject constructor(
 
     fun addBusLine(line: String) {
         _uiState.update { currentState ->
-            val newChosenBusLines = currentState.chosenBusLines
+            val newChosenBusLines = currentState.chosenBusLines.toMutableSet()
             newChosenBusLines.add(line)
             currentState.copy(
-                chosenBusLines = newChosenBusLines
+                chosenBusLines = newChosenBusLines.toSet()
             )
 
         }
@@ -83,10 +82,10 @@ class MapScreenViewModel @Inject constructor(
 
     fun removeTramLine(line: String) {
         _uiState.update { currentState ->
-            val newChosenTramLines = currentState.chosenTramLines
+            val newChosenTramLines = currentState.chosenTramLines.toMutableSet()
             newChosenTramLines.remove(line)
             currentState.copy(
-                chosenTramLines = newChosenTramLines
+                chosenTramLines = newChosenTramLines.toSet()
             )
 
         }
@@ -94,10 +93,10 @@ class MapScreenViewModel @Inject constructor(
 
     fun addTramLine(line: String) {
         _uiState.update { currentState ->
-            val newChosenTramLines = currentState.chosenTramLines
+            val newChosenTramLines = currentState.chosenTramLines.toMutableSet()
             newChosenTramLines.add(line)
             currentState.copy(
-                chosenTramLines = newChosenTramLines
+                chosenTramLines = newChosenTramLines.toSet()
             )
 
         }
