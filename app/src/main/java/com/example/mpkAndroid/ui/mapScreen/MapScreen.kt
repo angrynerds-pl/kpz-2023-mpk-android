@@ -25,9 +25,11 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun MapScreen(
-    mapScreenViewModel : MapScreenViewModel = hiltViewModel<MapScreenViewModel>(),
-    navController : NavController
+    mapScreenViewModel: MapScreenViewModel,
+    navController: NavController
 ) {
+
+    mapScreenViewModel.updateVehiclesPosition()
     val cameraPositionState = rememberCameraPositionState {
         position = mapScreenViewModel.uiState.value.startingCameraPosition!!
     }
@@ -68,6 +70,6 @@ fun MapScreen(
 @Preview
 fun MapScreenPreview() {
     MpkAndroidTheme {
-        MapScreen(navController = rememberNavController())
+        MapScreen(navController = rememberNavController(), mapScreenViewModel = hiltViewModel())
     }
 }

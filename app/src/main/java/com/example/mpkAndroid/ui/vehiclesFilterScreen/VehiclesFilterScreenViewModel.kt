@@ -1,6 +1,7 @@
 package com.example.mpkAndroid.ui.vehiclesFilterScreen
 
 import androidx.lifecycle.ViewModel
+import com.example.mpkAndroid.domain.VehiclesFilterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,23 +14,33 @@ data class VehiclesFilterScreenState(
 )
 
 @HiltViewModel
-class VehiclesFilterScreenViewModel @Inject constructor() : ViewModel(){
+class VehiclesFilterScreenViewModel @Inject constructor(
+    private val vehiclesFilterUseCase: VehiclesFilterUseCase
+) : ViewModel() {
     private val _uiState = MutableStateFlow(VehiclesFilterScreenState())
     val uiState: StateFlow<VehiclesFilterScreenState> = _uiState.asStateFlow()
 
-    fun selectTramSelectionMenu(){
-        _uiState.update {
-            currentState -> currentState.copy(
+    fun selectTramSelectionMenu() {
+        _uiState.update { currentState ->
+            currentState.copy(
                 isBusSelectionShown = false
             )
         }
     }
 
-    fun selectBusSelectionMenu(){
-        _uiState.update {
-                currentState -> currentState.copy(
-            isBusSelectionShown = true
-        )
+    fun selectBusSelectionMenu() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                isBusSelectionShown = true
+            )
         }
+    }
+
+    fun getAllBusLines(): Collection<String> {
+        return vehiclesFilterUseCase.getAllBusLines()
+    }
+
+    fun getAllTramLines(): Collection<String> {
+        return vehiclesFilterUseCase.getAllTramLines()
     }
 }
