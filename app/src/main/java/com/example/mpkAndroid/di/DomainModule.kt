@@ -2,6 +2,7 @@ package com.example.mpkAndroid.di
 
 import com.example.mpkAndroid.domain.MapPositionsUseCase
 import com.example.mpkAndroid.domain.VehicleRepository
+import com.example.mpkAndroid.domain.VehiclesFilterUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,12 @@ object DomainModule {
         vehicleRepository: VehicleRepository
     ): MapPositionsUseCase {
         return MapPositionsUseCase(vehicleRepository)
+    }
+
+    @Provides
+    fun provideVehiclesFilterUseCase(
+    ): VehiclesFilterUseCase {
+        return VehiclesFilterUseCase()
     }
 
 
