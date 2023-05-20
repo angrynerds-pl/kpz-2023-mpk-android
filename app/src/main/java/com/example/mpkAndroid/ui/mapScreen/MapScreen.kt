@@ -42,7 +42,6 @@ fun MapScreen(
         onTokenIdReceived = { user ->
             run {
                 mapScreenViewModel.updateUser(user)
-                Log.d("LOG", mapScreenViewModel.uiState.value.user.toString())
             }
         },
         onDialogDismissed = { message ->
