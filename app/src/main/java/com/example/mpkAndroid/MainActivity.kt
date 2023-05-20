@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mpkAndroid.ui.mapScreen.MapScreen
 import com.example.mpkAndroid.ui.mapScreen.MapScreenViewModel
+import com.example.mpkAndroid.ui.reportScreens.newReportScreen.NewReportScreen
 import com.example.mpkAndroid.ui.theme.MpkAndroidTheme
 import com.example.mpkAndroid.ui.vehiclesFilterScreen.VehiclesFilterScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,9 +45,21 @@ class MainActivity : ComponentActivity() {
                                 mapScreenViewModel = mapScreenViewModel
                             )
                         }
+                        composable("newReport")
+                        {
+                            NewReportScreen(
+                                navController = navController,
+                                mapScreenViewModel = mapScreenViewModel
+                            )
+                        }
+                        composable("reportDetails")
+                        {
+                            NewReportScreen(
+                                navController = navController,
+                                mapScreenViewModel = mapScreenViewModel
+                            )
+                        }
                     }
-
-
                 }
             }
         }

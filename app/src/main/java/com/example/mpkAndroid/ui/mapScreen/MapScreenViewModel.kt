@@ -3,9 +3,13 @@ package com.example.mpkAndroid.ui.mapScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mpkAndroid.domain.MapPositionsUseCase
+import com.example.mpkAndroid.domain.model.Report
+import com.example.mpkAndroid.domain.model.ReportType
 import com.example.mpkAndroid.domain.model.UserCredentials
 import com.example.mpkAndroid.domain.model.Vehicle
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,9 +23,12 @@ import javax.inject.Inject
 data class MapScreenState(
     var startingCameraPosition: CameraPosition? = null,
     val vehiclesPositions: List<Vehicle> = emptyList(),
+    val reports: List<Report> = emptyList(),
     val chosenTramLines: Set<String> = setOf("8"),
     val chosenBusLines: Set<String> = setOf("145"),
-    val user: UserCredentials? = null
+    val user: UserCredentials? = null,
+    val newReportPosition: LatLng? = null,
+    val selectedReportMarker: Marker? = null
 )
 
 @HiltViewModel
@@ -49,6 +56,26 @@ class MapScreenViewModel @Inject constructor(
                         currentState.chosenTramLines,
                         currentState.chosenBusLines
                     ) as List<Vehicle>
+                )
+            }
+        }
+    }
+
+    fun updateReports() {
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                //temporal hardcoded value
+                currentState.copy(
+                    reports = listOf(
+                        Report(
+                            "test",
+                            "Marian",
+                            ReportType.ACCIDENT,
+                            51.11,
+                            17.04,
+                            "test"
+                        )
+                    )
                 )
             }
         }
@@ -107,6 +134,22 @@ class MapScreenViewModel @Inject constructor(
         _uiState.update { currentState ->
             currentState.copy(
                 user = user
+            )
+        }
+    }
+
+    fun addNewReport(coordinates: LatLng) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                newReportPosition = coordinates
+            )
+        }
+    }
+
+    fun getReportDetails(marker: Marker) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedReportMarker = marker
             )
         }
     }

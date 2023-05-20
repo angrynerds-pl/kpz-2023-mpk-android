@@ -23,22 +23,22 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
-
 @Composable
 fun MapScreen(
     mapScreenViewModel: MapScreenViewModel,
     navController: NavController
 ) {
-
     mapScreenViewModel.updateVehiclesPosition()
+    mapScreenViewModel.updateReports()
+
     val cameraPositionState = rememberCameraPositionState {
         position = mapScreenViewModel.uiState.value.startingCameraPosition!!
     }
 
-    val state = rememberOneTapSignInState()
+    val loginState = rememberOneTapSignInState()
 
     OneTapSignInWithGoogle(
-        state = state,
+        state = loginState,
         onTokenIdReceived = { user ->
             run {
                 mapScreenViewModel.updateUser(user)
@@ -62,7 +62,7 @@ fun MapScreen(
                 Text(text = "Linie")
             }
             Button(
-                onClick = { state.open() },
+                onClick = { loginState.open() },
                 enabled = mapScreenViewModel.uiState.collectAsState().value.user == null,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
@@ -71,7 +71,11 @@ fun MapScreen(
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
+            onMapLongClick = { latLng ->
+                mapScreenViewModel.addNewReport(latLng)
+                navController.navigate("newReport")
+            }
         ) {
             mapScreenViewModel.uiState.collectAsState().value.vehiclesPositions.forEach { vehicle ->
                 when (vehicle.type) {
@@ -86,6 +90,18 @@ fun MapScreen(
                         type = MapMarkerType.TRAM
                     )
                 }
+            }
+            mapScreenViewModel.uiState.collectAsState().value.reports.forEach { report ->
+                MapMarker(
+                    position = LatLng(report.latitude, report.longitude),
+                    title = report.type.translation,
+                    type = MapMarkerType.REPORT,
+                    snippet = "Kliknij aby zobaczyć szczegóły",
+                    onInfoWindowClick = {
+                        mapScreenViewModel.getReportDetails(it)
+                        navController.navigate("reportDetails")
+                    }
+                )
             }
         }
     }

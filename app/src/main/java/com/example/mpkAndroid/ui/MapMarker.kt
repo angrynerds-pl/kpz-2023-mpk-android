@@ -11,10 +11,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.example.mpkAndroid.R
 import com.example.mpkAndroid.ui.theme.BusTagColor
+import com.example.mpkAndroid.ui.theme.ReportTagColor
 import com.example.mpkAndroid.ui.theme.TramTagColor
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 
@@ -22,8 +24,10 @@ import com.google.maps.android.compose.MarkerState
 fun MapMarker(
     position: LatLng,
     title: String,
+    snippet: String? = null,
     type: MapMarkerType = MapMarkerType.BUS,
-    iconSize: Int = 100
+    iconSize: Int = 100,
+    onInfoWindowClick: (Marker) -> Unit = {}
 ) {
     val icon = bitmapDescriptorFromVector(
         LocalContext.current, type, iconSize, title
@@ -31,13 +35,16 @@ fun MapMarker(
     Marker(
         state = MarkerState(position),
         title = title,
-        icon = icon
+        snippet = snippet,
+        icon = icon,
+        onInfoWindowClick = onInfoWindowClick
     )
 }
 
 enum class MapMarkerType(@DrawableRes val iconId: Int, val color: Int) {
     BUS(R.drawable.bus, BusTagColor.toArgb()),
-    TRAM(R.drawable.tram, TramTagColor.toArgb())
+    TRAM(R.drawable.tram, TramTagColor.toArgb()),
+    REPORT(R.drawable.report, ReportTagColor.toArgb())
 }
 
 fun bitmapDescriptorFromVector(
