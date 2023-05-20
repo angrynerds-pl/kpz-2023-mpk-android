@@ -6,8 +6,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,14 +36,13 @@ fun MapScreen(
     }
 
     val state = rememberOneTapSignInState()
-    val authenticated = remember { mutableStateOf(false) }
 
     OneTapSignInWithGoogle(
         state = state,
         onTokenIdReceived = { user ->
             run {
-                authenticated.value = true
-                Log.d("LOG", user.email)
+                mapScreenViewModel.updateUser(user)
+                Log.d("LOG", mapScreenViewModel.uiState.value.user.toString())
             }
         },
         onDialogDismissed = { message ->
@@ -67,7 +64,7 @@ fun MapScreen(
             }
             Button(
                 onClick = { state.open() },
-                enabled = !authenticated.value,
+                enabled = mapScreenViewModel.uiState.collectAsState().value.user == null,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
                 Text(text = "Logowanie")
