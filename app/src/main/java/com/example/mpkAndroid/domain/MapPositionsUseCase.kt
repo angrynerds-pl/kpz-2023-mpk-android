@@ -18,6 +18,9 @@ class MapPositionsUseCase @Inject constructor(
         chosenTramLines: Collection<String>,
         chosenBusLines: Collection<String>
     ): Collection<Vehicle> {
+        if(chosenTramLines.isEmpty() && chosenBusLines.isEmpty())
+            return emptyList()
+
         return vehicleRepository.getPositions(chosenTramLines, chosenBusLines)
     }
 

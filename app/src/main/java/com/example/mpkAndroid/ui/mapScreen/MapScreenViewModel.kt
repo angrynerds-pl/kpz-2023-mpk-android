@@ -3,6 +3,7 @@ package com.example.mpkAndroid.ui.mapScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mpkAndroid.domain.MapPositionsUseCase
+import com.example.mpkAndroid.domain.model.UserCredentials
 import com.example.mpkAndroid.domain.model.Vehicle
 import com.google.android.gms.maps.model.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +20,8 @@ data class MapScreenState(
     var startingCameraPosition: CameraPosition? = null,
     val vehiclesPositions: List<Vehicle> = emptyList(),
     val chosenTramLines: Set<String> = setOf("8"),
-    val chosenBusLines: Set<String> = setOf("145")
-
+    val chosenBusLines: Set<String> = setOf("145"),
+    val user: UserCredentials? = null
 )
 
 @HiltViewModel
@@ -99,6 +100,14 @@ class MapScreenViewModel @Inject constructor(
                 chosenTramLines = newChosenTramLines.toSet()
             )
 
+        }
+    }
+
+    fun updateUser(user: UserCredentials) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                user = user
+            )
         }
     }
 

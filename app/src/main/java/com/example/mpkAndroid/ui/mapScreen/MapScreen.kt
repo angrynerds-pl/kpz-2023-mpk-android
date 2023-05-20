@@ -1,8 +1,7 @@
 package com.example.mpkAndroid.ui.mapScreen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import android.util.Log
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mpkAndroid.domain.model.VehicleType
 import com.example.mpkAndroid.ui.MapMarker
 import com.example.mpkAndroid.ui.MapMarkerType
+import com.example.mpkAndroid.ui.mapScreen.oAuthLogin.OneTapSignInWithGoogle
+import com.example.mpkAndroid.ui.mapScreen.oAuthLogin.rememberOneTapSignInState
 import com.example.mpkAndroid.ui.theme.MpkAndroidTheme
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -34,14 +35,39 @@ fun MapScreen(
         position = mapScreenViewModel.uiState.value.startingCameraPosition!!
     }
 
+    val state = rememberOneTapSignInState()
+
+    OneTapSignInWithGoogle(
+        state = state,
+        onTokenIdReceived = { user ->
+            run {
+                mapScreenViewModel.updateUser(user)
+            }
+        },
+        onDialogDismissed = { message ->
+            Log.d("LOG", message)
+        }
+    )
+
     Column(
         horizontalAlignment = Alignment.End
     ) {
-        Button(
-            onClick = { navController.navigate("vehiclesFilter") },
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+        Row(
+            horizontalArrangement = Arrangement.End,
         ) {
-            Text(text = "Linie")
+            Button(
+                onClick = { navController.navigate("vehiclesFilter") },
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            ) {
+                Text(text = "Linie")
+            }
+            Button(
+                onClick = { state.open() },
+                enabled = mapScreenViewModel.uiState.collectAsState().value.user == null,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            ) {
+                Text(text = "Logowanie")
+            }
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
