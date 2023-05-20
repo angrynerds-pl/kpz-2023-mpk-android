@@ -1,9 +1,7 @@
 package com.example.mpkAndroid.ui.mapScreen
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,12 +18,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mpkAndroid.domain.model.VehicleType
 import com.example.mpkAndroid.ui.MapMarker
 import com.example.mpkAndroid.ui.MapMarkerType
+import com.example.mpkAndroid.ui.mapScreen.oAuthLogin.OneTapSignInWithGoogle
+import com.example.mpkAndroid.ui.mapScreen.oAuthLogin.rememberOneTapSignInState
 import com.example.mpkAndroid.ui.theme.MpkAndroidTheme
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.stevdzasan.onetap.OneTapSignInWithGoogle
-import com.stevdzasan.onetap.rememberOneTapSignInState
 
 
 @Composable
@@ -44,9 +42,11 @@ fun MapScreen(
 
     OneTapSignInWithGoogle(
         state = state,
-        clientId = "450827284299-rvcq4akjifg5etd921ppvgccfbl2ffoc.apps.googleusercontent.com",
-        onTokenIdReceived = { tokenId ->
-            Log.d("LOG", tokenId)
+        onTokenIdReceived = { user ->
+            run {
+                authenticated.value = true
+                Log.d("LOG", user.email)
+            }
         },
         onDialogDismissed = { message ->
             Log.d("LOG", message)
@@ -56,18 +56,22 @@ fun MapScreen(
     Column(
         horizontalAlignment = Alignment.End
     ) {
-        Button(
-            onClick = { navController.navigate("vehiclesFilter") },
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+        Row(
+            horizontalArrangement = Arrangement.End,
         ) {
-            Text(text = "Linie")
-        }
-        Button(
-            onClick = { state.open() },
-            enabled = !state.opened,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-        ) {
-            Text(text = "Logowanie")
+            Button(
+                onClick = { navController.navigate("vehiclesFilter") },
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            ) {
+                Text(text = "Linie")
+            }
+            Button(
+                onClick = { state.open() },
+                enabled = !authenticated.value,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            ) {
+                Text(text = "Logowanie")
+            }
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
