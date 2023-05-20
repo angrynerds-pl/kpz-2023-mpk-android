@@ -98,7 +98,7 @@ fun MapScreen(
                     type = MapMarkerType.REPORT,
                     snippet = "Kliknij aby zobaczyć szczegóły",
                     onInfoWindowClick = {
-                        mapScreenViewModel.getReportDetails(it)
+                        mapScreenViewModel.updateSelectedReport(it)
                         navController.navigate("reportDetails")
                     }
                 )

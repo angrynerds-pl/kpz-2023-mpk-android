@@ -3,8 +3,8 @@ package com.example.mpkAndroid.ui.mapScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mpkAndroid.domain.MapPositionsUseCase
+import com.example.mpkAndroid.domain.ReportsUseCase
 import com.example.mpkAndroid.domain.model.Report
-import com.example.mpkAndroid.domain.model.ReportType
 import com.example.mpkAndroid.domain.model.UserCredentials
 import com.example.mpkAndroid.domain.model.Vehicle
 import com.google.android.gms.maps.model.CameraPosition
@@ -34,7 +34,8 @@ data class MapScreenState(
 @HiltViewModel
 class MapScreenViewModel @Inject constructor(
     private val mapPositionsUseCase: MapPositionsUseCase,
-    private val backgroundExecutor: ScheduledExecutorService
+    private val backgroundExecutor: ScheduledExecutorService,
+    private val reportsUseCase: ReportsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MapScreenState())
@@ -47,8 +48,7 @@ class MapScreenViewModel @Inject constructor(
         }, 0, 15, TimeUnit.SECONDS)
     }
 
-    fun updateVehiclesPosition(
-    ) {
+    fun updateVehiclesPosition() {
         viewModelScope.launch {
             _uiState.update { currentState ->
                 currentState.copy(
@@ -64,18 +64,8 @@ class MapScreenViewModel @Inject constructor(
     fun updateReports() {
         viewModelScope.launch {
             _uiState.update { currentState ->
-                //temporal hardcoded value
                 currentState.copy(
-                    reports = listOf(
-                        Report(
-                            "test",
-                            "Marian",
-                            ReportType.ACCIDENT,
-                            51.11,
-                            17.04,
-                            "test"
-                        )
-                    )
+                    reports = reportsUseCase.getReports() as List<Report>
                 )
             }
         }
@@ -146,7 +136,7 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
-    fun getReportDetails(marker: Marker) {
+    fun updateSelectedReport(marker: Marker) {
         _uiState.update { currentState ->
             currentState.copy(
                 selectedReportMarker = marker

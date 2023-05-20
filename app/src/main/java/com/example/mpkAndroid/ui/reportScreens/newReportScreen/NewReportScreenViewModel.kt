@@ -5,7 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NewReportScreenViewModel @Inject constructor(
-) : ViewModel() {
+class NewReportScreenViewModel @Inject constructor() : ViewModel() {
 
 }
