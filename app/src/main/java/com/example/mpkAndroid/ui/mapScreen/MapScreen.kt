@@ -37,13 +37,12 @@ fun MapScreen(
     }
 
     val loginState = rememberOneTapSignInState()
+    val showDetails = mapScreenViewModel.uiState.collectAsState().value.showDetails
 
-    val selectedReport = mapScreenViewModel.uiState.collectAsState().value.selectedReportMarker
-
-    LaunchedEffect(selectedReport) {
-        if (selectedReport != null) {
+    LaunchedEffect(showDetails) {
+        if (showDetails) {
             navController.navigate("reportDetails")
-            mapScreenViewModel.clearSelectedReport()
+            mapScreenViewModel.closeReportDetails()
         }
     }
 
@@ -112,7 +111,7 @@ fun MapScreen(
                     type = MapMarkerType.REPORT,
                     snippet = "Kliknij aby zobaczyć szczegóły",
                     onInfoWindowClick = {
-                        mapScreenViewModel.selectedReport(it)
+                        mapScreenViewModel.selectReport(it)
                     }
                 )
             }

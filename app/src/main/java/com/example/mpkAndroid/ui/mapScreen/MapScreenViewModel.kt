@@ -28,7 +28,8 @@ data class MapScreenState(
     val chosenBusLines: Set<String> = setOf("145"),
     val user: UserCredentials? = null,
     val newReportPosition: LatLng? = null,
-    val selectedReportMarker: Marker? = null
+    val selectedReportMarker: Marker? = null,
+    val showDetails: Boolean = false
 )
 
 @HiltViewModel
@@ -136,18 +137,19 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
-    fun selectedReport(marker: Marker) {
+    fun selectReport(marker: Marker) {
         _uiState.update { currentState ->
             currentState.copy(
-                selectedReportMarker = marker
+                selectedReportMarker = marker,
+                showDetails = true
             )
         }
     }
 
-    fun clearSelectedReport() {
+    fun closeReportDetails() {
         _uiState.update { currentState ->
             currentState.copy(
-                selectedReportMarker = null
+                showDetails = false
             )
         }
     }
