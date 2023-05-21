@@ -73,8 +73,10 @@ fun MapScreen(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             onMapLongClick = { latLng ->
-                mapScreenViewModel.addNewReport(latLng)
-                navController.navigate("newReport")
+                if(mapScreenViewModel.uiState.value.user != null) {
+                    mapScreenViewModel.addNewReport(latLng)
+                    navController.navigate("newReport")
+                }
             }
         ) {
             mapScreenViewModel.uiState.collectAsState().value.vehiclesPositions.forEach { vehicle ->
@@ -82,11 +84,13 @@ fun MapScreen(
                     VehicleType.BUS -> MapMarker(
                         position = LatLng(vehicle.latitude, vehicle.longitude),
                         title = vehicle.number,
+                        iconText = vehicle.number,
                         type = MapMarkerType.BUS
                     )
                     VehicleType.TRAM -> MapMarker(
                         position = LatLng(vehicle.latitude, vehicle.longitude),
                         title = vehicle.number,
+                        iconText = vehicle.number,
                         type = MapMarkerType.TRAM
                     )
                 }

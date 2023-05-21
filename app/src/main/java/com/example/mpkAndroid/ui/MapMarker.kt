@@ -24,13 +24,14 @@ import com.google.maps.android.compose.MarkerState
 fun MapMarker(
     position: LatLng,
     title: String,
+    iconText: String = "",
     snippet: String? = null,
     type: MapMarkerType = MapMarkerType.BUS,
     iconSize: Int = 100,
     onInfoWindowClick: (Marker) -> Unit = {}
 ) {
     val icon = bitmapDescriptorFromVector(
-        LocalContext.current, type, iconSize, title
+        LocalContext.current, type, iconSize,iconText
     )
     Marker(
         state = MarkerState(position),
