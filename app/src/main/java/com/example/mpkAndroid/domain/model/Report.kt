@@ -5,8 +5,7 @@ data class Report(
     val authorName: String,
     val type: ReportType,
     val latitude: Double,
-    val longitude: Double,
-    val description: String
+    val longitude: Double
 )
 
 enum class ReportType(val translation: String) {

@@ -5,7 +5,6 @@ import com.example.mpkAndroid.domain.model.ReportType
 import javax.inject.Inject;
 
 class ReportsUseCase @Inject constructor() {
-
     suspend fun getReports(): Collection<Report> {
         return listOf(
             Report(
@@ -13,13 +12,12 @@ class ReportsUseCase @Inject constructor() {
                 "Marian",
                 ReportType.ACCIDENT,
                 51.11,
-                17.04,
-                "test"
+                17.04
             )
         )
     }
 
-    suspend fun addNewReport(report: Report) {
+    fun addNewReport(report: Report) {
         //TODO
     }
 
