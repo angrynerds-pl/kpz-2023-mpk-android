@@ -136,10 +136,18 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedReport(marker: Marker) {
+    fun selectedReport(marker: Marker) {
         _uiState.update { currentState ->
             currentState.copy(
                 selectedReportMarker = marker
+            )
+        }
+    }
+
+    fun clearSelectedReport() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedReportMarker = null
             )
         }
     }
