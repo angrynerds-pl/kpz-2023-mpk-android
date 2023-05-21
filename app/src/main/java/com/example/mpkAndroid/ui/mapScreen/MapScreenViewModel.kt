@@ -154,6 +154,18 @@ class MapScreenViewModel @Inject constructor(
         }
     }
 
+    fun getReportDetailsForSelectedMarker(): Report {
+        val marker = _uiState.value.selectedReportMarker
+        if (marker != null) {
+            return _uiState.value.reports.find { report ->
+                report.longitude == marker.position.longitude &&
+                        report.latitude == marker.position.latitude
+            }!!
+        }
+
+        return _uiState.value.reports.first()
+    }
+
     override fun onCleared() {
         backgroundExecutor.shutdownNow()
     }
