@@ -21,7 +21,7 @@ import com.example.mpkAndroid.ui.mapScreen.MapScreenViewModel
 @Composable
 fun VehiclesFilterScreen(
     mapScreenViewModel: MapScreenViewModel,
-    vehiclesFilterScreenViewModel: VehiclesFilterScreenViewModel = hiltViewModel<VehiclesFilterScreenViewModel>(),
+    vehiclesFilterScreenViewModel: VehiclesFilterScreenViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val tramButtonColor: ButtonColors =

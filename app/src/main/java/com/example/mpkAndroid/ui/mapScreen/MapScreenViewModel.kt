@@ -3,9 +3,13 @@ package com.example.mpkAndroid.ui.mapScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mpkAndroid.domain.MapPositionsUseCase
+import com.example.mpkAndroid.domain.ReportsUseCase
+import com.example.mpkAndroid.domain.model.Report
 import com.example.mpkAndroid.domain.model.UserCredentials
 import com.example.mpkAndroid.domain.model.Vehicle
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,15 +23,20 @@ import javax.inject.Inject
 data class MapScreenState(
     var startingCameraPosition: CameraPosition? = null,
     val vehiclesPositions: List<Vehicle> = emptyList(),
+    val reports: List<Report> = emptyList(),
     val chosenTramLines: Set<String> = setOf("8"),
     val chosenBusLines: Set<String> = setOf("145"),
-    val user: UserCredentials? = null
+    val user: UserCredentials? = null,
+    val newReportPosition: LatLng? = null,
+    val selectedReportMarker: Marker? = null,
+    val showDetails: Boolean = false
 )
 
 @HiltViewModel
 class MapScreenViewModel @Inject constructor(
     private val mapPositionsUseCase: MapPositionsUseCase,
-    private val backgroundExecutor: ScheduledExecutorService
+    private val backgroundExecutor: ScheduledExecutorService,
+    private val reportsUseCase: ReportsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MapScreenState())
@@ -40,8 +49,7 @@ class MapScreenViewModel @Inject constructor(
         }, 0, 15, TimeUnit.SECONDS)
     }
 
-    fun updateVehiclesPosition(
-    ) {
+    fun updateVehiclesPosition() {
         viewModelScope.launch {
             _uiState.update { currentState ->
                 currentState.copy(
@@ -49,6 +57,16 @@ class MapScreenViewModel @Inject constructor(
                         currentState.chosenTramLines,
                         currentState.chosenBusLines
                     ) as List<Vehicle>
+                )
+            }
+        }
+    }
+
+    fun updateReports() {
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    reports = reportsUseCase.getReports() as List<Report>
                 )
             }
         }
@@ -109,6 +127,43 @@ class MapScreenViewModel @Inject constructor(
                 user = user
             )
         }
+    }
+
+    fun addNewReport(coordinates: LatLng) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                newReportPosition = coordinates
+            )
+        }
+    }
+
+    fun selectReport(marker: Marker) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedReportMarker = marker,
+                showDetails = true
+            )
+        }
+    }
+
+    fun closeReportDetails() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                showDetails = false
+            )
+        }
+    }
+
+    fun getReportDetailsForSelectedMarker(): Report {
+        val marker = _uiState.value.selectedReportMarker
+        if (marker != null) {
+            return _uiState.value.reports.find { report ->
+                report.longitude == marker.position.longitude &&
+                        report.latitude == marker.position.latitude
+            }!!
+        }
+
+        return _uiState.value.reports.first()
     }
 
     override fun onCleared() {

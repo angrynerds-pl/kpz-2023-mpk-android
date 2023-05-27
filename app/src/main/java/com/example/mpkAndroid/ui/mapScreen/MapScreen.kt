@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,22 +24,30 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
-
 @Composable
 fun MapScreen(
     mapScreenViewModel: MapScreenViewModel,
     navController: NavController
 ) {
-
     mapScreenViewModel.updateVehiclesPosition()
+    mapScreenViewModel.updateReports()
+
     val cameraPositionState = rememberCameraPositionState {
         position = mapScreenViewModel.uiState.value.startingCameraPosition!!
     }
 
-    val state = rememberOneTapSignInState()
+    val loginState = rememberOneTapSignInState()
+    val showDetails = mapScreenViewModel.uiState.collectAsState().value.showDetails
+
+    LaunchedEffect(showDetails) {
+        if (showDetails) {
+            navController.navigate("reportDetails")
+            mapScreenViewModel.closeReportDetails()
+        }
+    }
 
     OneTapSignInWithGoogle(
-        state = state,
+        state = loginState,
         onTokenIdReceived = { user ->
             run {
                 mapScreenViewModel.updateUser(user)
@@ -62,7 +71,7 @@ fun MapScreen(
                 Text(text = "Linie")
             }
             Button(
-                onClick = { state.open() },
+                onClick = { loginState.open() },
                 enabled = mapScreenViewModel.uiState.collectAsState().value.user == null,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
@@ -71,21 +80,40 @@ fun MapScreen(
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
+            onMapLongClick = { latLng ->
+                if(mapScreenViewModel.uiState.value.user != null) {
+                    mapScreenViewModel.addNewReport(latLng)
+                    navController.navigate("newReport")
+                }
+            }
         ) {
             mapScreenViewModel.uiState.collectAsState().value.vehiclesPositions.forEach { vehicle ->
                 when (vehicle.type) {
                     VehicleType.BUS -> MapMarker(
                         position = LatLng(vehicle.latitude, vehicle.longitude),
                         title = vehicle.number,
+                        iconText = vehicle.number,
                         type = MapMarkerType.BUS
                     )
                     VehicleType.TRAM -> MapMarker(
                         position = LatLng(vehicle.latitude, vehicle.longitude),
                         title = vehicle.number,
+                        iconText = vehicle.number,
                         type = MapMarkerType.TRAM
                     )
                 }
+            }
+            mapScreenViewModel.uiState.collectAsState().value.reports.forEach { report ->
+                MapMarker(
+                    position = LatLng(report.latitude, report.longitude),
+                    title = report.type.translation,
+                    type = MapMarkerType.REPORT,
+                    snippet = "Kliknij aby zobaczyć szczegóły",
+                    onInfoWindowClick = {
+                        mapScreenViewModel.selectReport(it)
+                    }
+                )
             }
         }
     }

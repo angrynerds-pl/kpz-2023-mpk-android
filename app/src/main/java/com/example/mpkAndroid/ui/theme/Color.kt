@@ -9,3 +9,4 @@ val Teal200 = Color(0xFF03DAC5)
 
 val BusTagColor = Color(0xFFFFBD59)
 val TramTagColor = Color(0xFF5271FF)
+val ReportTagColor = Color(0xFFE53935)
