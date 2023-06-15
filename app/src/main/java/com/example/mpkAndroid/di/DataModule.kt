@@ -1,5 +1,6 @@
 package com.example.mpkAndroid.di
 
+import com.example.mpkAndroid.data.network.reportsService.ReportsApiService
 import com.example.mpkAndroid.data.network.vehiclesPositionsApiService.VehiclesPositionsApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -24,5 +25,15 @@ object DataModule {
             .build()
 
         return retrofit.create(VehiclesPositionsApiService::class.java)
+    }
+
+    @Provides
+    fun providesReportsApiService(): ReportsApiService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://localhost:7036/")
+            .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
+            .build()
+
+        return retrofit.create(ReportsApiService::class.java)
     }
 }

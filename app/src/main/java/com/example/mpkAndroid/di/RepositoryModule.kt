@@ -1,7 +1,8 @@
 package com.example.mpkAndroid.di
 
-import androidx.lifecycle.ViewModel
+import com.example.mpkAndroid.data.repository.ReportRepositoryImpl
 import com.example.mpkAndroid.data.repository.VehicleRepositoryImpl
+import com.example.mpkAndroid.domain.ReportRepository
 import com.example.mpkAndroid.domain.VehicleRepository
 import dagger.Binds
 import dagger.Module
@@ -17,4 +18,9 @@ abstract class RepositoryModule {
     abstract fun bindVehicleRepository(
         vehicleRepositoryImpl: VehicleRepositoryImpl
     ): VehicleRepository
+
+    @Binds
+    abstract fun bindReportRepository(
+        reportRepositoryImpl: ReportRepositoryImpl
+    ): ReportRepository
 }

@@ -4,17 +4,11 @@ import com.example.mpkAndroid.domain.model.Report
 import com.example.mpkAndroid.domain.model.ReportType
 import javax.inject.Inject;
 
-class ReportsUseCase @Inject constructor() {
+class ReportsUseCase @Inject constructor(
+    private val reportRepository: ReportRepository
+) {
     suspend fun getReports(): Collection<Report> {
-        return listOf(
-            Report(
-                "test",
-                "Marian",
-                ReportType.ACCIDENT,
-                51.11,
-                17.04
-            )
-        )
+        return reportRepository.getReports()
     }
 
     fun addNewReport(report: Report) {

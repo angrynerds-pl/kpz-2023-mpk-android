@@ -1,6 +1,7 @@
 package com.example.mpkAndroid.di
 
 import com.example.mpkAndroid.domain.MapPositionsUseCase
+import com.example.mpkAndroid.domain.ReportRepository
 import com.example.mpkAndroid.domain.ReportsUseCase
 import com.example.mpkAndroid.domain.VehicleRepository
 import com.example.mpkAndroid.domain.VehiclesFilterUseCase
@@ -30,8 +31,9 @@ object DomainModule {
 
     @Provides
     fun provideReportsUseCase(
+        reportRepository: ReportRepository
     ): ReportsUseCase {
-        return ReportsUseCase()
+        return ReportsUseCase(reportRepository)
     }
 
 
