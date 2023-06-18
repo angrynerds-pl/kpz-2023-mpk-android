@@ -10,7 +10,7 @@ class ReportStaticFactory {
             return Report(
                 reportEntity.publisherName,
                 reportEntity.publisherName,
-                ReportType.valueOf(reportEntity.type.uppercase()),
+                ReportType.values()[reportEntity.type],
                 reportEntity.latitude,
                 reportEntity.longitude
             )

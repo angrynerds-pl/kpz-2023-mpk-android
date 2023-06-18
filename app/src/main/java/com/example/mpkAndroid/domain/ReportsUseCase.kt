@@ -11,8 +11,8 @@ class ReportsUseCase @Inject constructor(
         return reportRepository.getReports()
     }
 
-    fun addNewReport(report: Report) {
-        //TODO
+    suspend fun addNewReport(report: Report) {
+        reportRepository.publishReport(report)
     }
 
 }

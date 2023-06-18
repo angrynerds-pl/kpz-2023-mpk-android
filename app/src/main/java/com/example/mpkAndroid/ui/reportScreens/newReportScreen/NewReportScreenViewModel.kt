@@ -36,6 +36,8 @@ class NewReportScreenViewModel @Inject constructor(
     }
 
     fun addNewReport(report: Report) {
-        reportsUseCase.addNewReport(report)
+        viewModelScope.launch {
+            reportsUseCase.addNewReport(report)
+        }
     }
 }
